@@ -963,7 +963,7 @@ class ZoteroSingleCollectionMCPServer {
   }
 
   async getCollectionOverview() {
-    const items = await this.makeZoteroRequest(`/collections/${this.collectionKey}/items`);
+    const items = await this.makeZoteroRequest(`/collections/${this.collectionKey}/items`, { limit: 500 });
     
     // Count by item type
     const typeCount = {};
