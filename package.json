@@ -1,0 +1,21 @@
+{
+  "name": "zotero-mcp-server",
+  "version": "1.0.0",
+  "description": "A Model Context Protocol server for Zotero integration",
+  "main": "zotero-mcp-server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node zotero-mcp-server.js",
+    "test": "node test-zotero.js"
+  },
+  "keywords": ["mcp", "zotero", "research", "bibliography"],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.1.0",
+    "node-fetch": "^3.3.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
