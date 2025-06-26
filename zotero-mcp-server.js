@@ -20,8 +20,9 @@ class ZoteroSingleCollectionMCPServer {
   constructor() {
     this.server = new Server(
       {
-        name: "zotero-single-collection-mcp-server",
+        name: "Climate Index",
         version: "0.1.0",
+        description: "Research analysis for climate science papers",
       },
       {
         capabilities: {
