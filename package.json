@@ -8,14 +8,28 @@
     "start": "node zotero-mcp-server.js",
     "test": "node test-zotero.js"
   },
-  "keywords": ["mcp", "zotero", "research", "bibliography"],
+  "keywords": [
+    "mcp",
+    "zotero",
+    "research",
+    "bibliography"
+  ],
   "author": "Your Name",
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^0.1.0",
-    "node-fetch": "^3.3.2"
+    "@modelcontextprotocol/sdk": "^1.13.2",
+    "node-fetch": "^3.3.2",
+    "papaparse": "^5.4.1"
   },
   "engines": {
     "node": ">=16.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tom-mcmillan/zotero-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tom-mcmillan/zotero-mcp-server/issues"
+  },
+  "homepage": "https://github.com/tom-mcmillan/zotero-mcp-server#readme"
 }
