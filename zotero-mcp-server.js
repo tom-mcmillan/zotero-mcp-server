@@ -736,7 +736,7 @@ class ZoteroSingleCollectionMCPServer {
   }
 
   async getElicitSummary(includeDetails = false) {
-    const items = await this.makeZoteroRequest(`/collections/${this.collectionKey}/items`, { limit: 200 });
+    const items = await this.makeZoteroRequest(`/collections/${this.collectionKey}/items`, { limit: 100 });
     
     const summary = {
       total_papers: items.length,
