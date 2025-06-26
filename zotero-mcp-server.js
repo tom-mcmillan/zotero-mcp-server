@@ -194,15 +194,15 @@ class ZoteroSingleCollectionMCPServer {
             },
           },
           {
-            name: "search_by_elicit_metadata",
-            description: "Search papers specifically by Elicit analysis content (methodology, findings, etc.)",
+            name: "search_by_analysis_metadata",
+            description: "Search papers by structured analysis content (methodology, findings, etc.)",
             inputSchema: {
               type: "object",
               properties: {
                 search_field: {
                   type: "string",
                   enum: ["summary", "findings", "methodology", "limitations", "intervention", "research_question", "all"],
-                  description: "Which Elicit field to search in",
+                  description: "Which analysis field to search in",
                   default: "all"
                 },
                 query: {
@@ -227,8 +227,8 @@ class ZoteroSingleCollectionMCPServer {
             }
           },
           {
-            name: "get_elicit_summary",
-            description: "Get a summary of Elicit analysis coverage across the collection",
+            name: "get_analysis_summary",
+            description: "Get a summary of structured analysis coverage across the collection",
             inputSchema: {
               type: "object",
               properties: {
@@ -242,7 +242,7 @@ class ZoteroSingleCollectionMCPServer {
           },
           {
             name: "compare_methodologies",
-            description: "Compare methodologies across papers with Elicit analysis",
+            description: "Compare methodologies across papers with structured analysis",
             inputSchema: {
               type: "object",
               properties: {
@@ -317,11 +317,11 @@ class ZoteroSingleCollectionMCPServer {
           case "get_collection_overview":
             return await this.getCollectionOverview();
           
-          case "search_by_elicit_metadata":
-            return await this.searchByElicitMetadata(args);
+          case "search_by_analysis_metadata":
+            return await this.searchByAnalysisMetadata(args);
           
-          case "get_elicit_summary":
-            return await this.getElicitSummary(args?.include_details || false);
+          case "get_analysis_summary":
+            return await this.getAnalysisSummary(args?.include_details || false);
           
           case "compare_methodologies":
             return await this.compareMethodologies(args?.focus_area || "study_design", args?.limit || 20);
@@ -639,23 +639,24 @@ class ZoteroSingleCollectionMCPServer {
       .trim();
   }
 
-  async searchByElicitMetadata(args) {
+  async searchByAnalysisMetadata(args) {
     const items = await this.makeZoteroRequest(`/collections/${this.collectionKey}/items`, { limit: 100 });
     const results = [];
     
     for (const item of items) {
       const children = await this.makeZoteroRequest(`/items/${item.key}/children`);
       
-      // Find Elicit analysis note
-      const elicitNote = children.find(child => 
+      // Find structured analysis note
+      const analysisNote = children.find(child => 
         child.data.itemType === 'note' && 
-        (child.data.note?.includes('Elicit Analysis') || 
-         child.data.note?.includes('elicit-analysis'))
+        (child.data.note?.includes('Analysis') || 
+         child.data.note?.includes('analysis') ||
+         child.data.note?.includes('ANALYSIS'))
       );
       
-      if (!elicitNote) continue;
+      if (!analysisNote) continue;
       
-      const noteContent = elicitNote.data.note.toLowerCase();
+      const noteContent = analysisNote.data.note.toLowerCase();
       const queryLower = args.query.toLowerCase();
       
       // Search in specific field or all fields
@@ -713,7 +714,7 @@ class ZoteroSingleCollectionMCPServer {
           title: item.data.title,
           authors: item.data.creators || [],
           match_context: this.cleanHTMLForDisplay(matchContext),
-          elicit_note_key: elicitNote.key
+          analysis_note_key: analysisNote.key
         });
       }
       
@@ -735,12 +736,12 @@ class ZoteroSingleCollectionMCPServer {
     };
   }
 
-  async getElicitSummary(includeDetails = false) {
+  async getAnalysisSummary(includeDetails = false) {
     const items = await this.makeZoteroRequest(`/collections/${this.collectionKey}/items`, { limit: 100 });
     
     const summary = {
       total_papers: items.length,
-      papers_with_elicit: 0,
+      papers_with_analysis: 0,
       analysis_coverage: {},
       study_designs: {},
       regions: {},
@@ -752,16 +753,17 @@ class ZoteroSingleCollectionMCPServer {
     for (const item of items) {
       const children = await this.makeZoteroRequest(`/items/${item.key}/children`);
       
-      const elicitNote = children.find(child => 
+      const analysisNote = children.find(child => 
         child.data.itemType === 'note' && 
-        (child.data.note?.includes('Elicit Analysis') || 
-         child.data.note?.includes('elicit-analysis'))
+        (child.data.note?.includes('Analysis') || 
+         child.data.note?.includes('analysis') ||
+         child.data.note?.includes('ANALYSIS'))
       );
       
-      if (elicitNote) {
-        summary.papers_with_elicit++;
+      if (analysisNote) {
+        summary.papers_with_analysis++;
         
-        const noteContent = elicitNote.data.note;
+        const noteContent = analysisNote.data.note;
         
         // Extract study design
         const studyDesignMatch = noteContent.match(/Study Design.*?<p[^>]*>(.*?)<\/p>/i);
@@ -796,7 +798,7 @@ class ZoteroSingleCollectionMCPServer {
             paper_key: item.key,
             paper_title: item.data.title,
             analysis_fields: presentFields,
-            note_key: elicitNote.key
+            note_key: analysisNote.key
           });
         }
       }
@@ -804,7 +806,7 @@ class ZoteroSingleCollectionMCPServer {
     
     const result = {
       summary,
-      coverage_percentage: Math.round((summary.papers_with_elicit / summary.total_papers) * 100)
+      coverage_percentage: Math.round((summary.papers_with_analysis / summary.total_papers) * 100)
     };
     
     if (includeDetails) {
@@ -828,15 +830,16 @@ class ZoteroSingleCollectionMCPServer {
     for (const item of items) {
       const children = await this.makeZoteroRequest(`/items/${item.key}/children`);
       
-      const elicitNote = children.find(child => 
+      const analysisNote = children.find(child => 
         child.data.itemType === 'note' && 
-        (child.data.note?.includes('Elicit Analysis') || 
-         child.data.note?.includes('elicit-analysis'))
+        (child.data.note?.includes('Analysis') || 
+         child.data.note?.includes('analysis') ||
+         child.data.note?.includes('ANALYSIS'))
       );
       
-      if (!elicitNote) continue;
+      if (!analysisNote) continue;
       
-      const noteContent = elicitNote.data.note;
+      const noteContent = analysisNote.data.note;
       let extractedValue = '';
       
       // Extract based on focus area
@@ -892,15 +895,16 @@ class ZoteroSingleCollectionMCPServer {
     for (const item of items) {
       const children = await this.makeZoteroRequest(`/items/${item.key}/children`);
       
-      const elicitNote = children.find(child => 
+      const analysisNote = children.find(child => 
         child.data.itemType === 'note' && 
-        (child.data.note?.includes('Elicit Analysis') || 
-         child.data.note?.includes('elicit-analysis'))
+        (child.data.note?.includes('Analysis') || 
+         child.data.note?.includes('analysis') ||
+         child.data.note?.includes('ANALYSIS'))
       );
       
-      if (!elicitNote) continue;
+      if (!analysisNote) continue;
       
-      const noteContent = elicitNote.data.note;
+      const noteContent = analysisNote.data.note;
       
       // Extract research gaps
       const gapsMatch = noteContent.match(/Research Gaps.*?<p[^>]*>(.*?)<\/p>/i);
