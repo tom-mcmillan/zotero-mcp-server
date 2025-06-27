@@ -16,7 +16,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import fetch from 'node-fetch';
 
-export class ZoteroSingleCollectionMCPServer {
+class ZoteroSingleCollectionMCPServer {
   constructor() {
     this.server = new Server(
       {
@@ -45,7 +45,7 @@ export class ZoteroSingleCollectionMCPServer {
       return {
         tools: [
           {
-            name: "get_collection_info",
+            name: "get_overview",
             description: "Get information about the configured collection",
             inputSchema: {
               type: "object",
@@ -53,7 +53,7 @@ export class ZoteroSingleCollectionMCPServer {
             },
           },
           {
-            name: "list_items",
+            name: "index_research",
             description: "List all items in the configured collection",
             inputSchema: {
               type: "object",
@@ -78,7 +78,7 @@ export class ZoteroSingleCollectionMCPServer {
             },
           },
           {
-            name: "search_items",
+            name: "search_research",
             description: "Search for items within the configured collection",
             inputSchema: {
               type: "object",
@@ -105,7 +105,7 @@ export class ZoteroSingleCollectionMCPServer {
             },
           },
           {
-            name: "get_item_details",
+            name: "get_details",
             description: "Get detailed information about a specific item in the collection",
             inputSchema: {
               type: "object",
@@ -124,21 +124,7 @@ export class ZoteroSingleCollectionMCPServer {
             },
           },
           {
-            name: "get_collection_tags",
-            description: "Get all tags used in the configured collection",
-            inputSchema: {
-              type: "object",
-              properties: {
-                limit: {
-                  type: "number",
-                  description: "Maximum number of tags to return (default: 100)",
-                  default: 100
-                }
-              }
-            },
-          },
-          {
-            name: "generate_bibliography",
+            name: "get_bibliography",
             description: "Generate a bibliography for specific items in the collection",
             inputSchema: {
               type: "object",
@@ -168,25 +154,6 @@ export class ZoteroSingleCollectionMCPServer {
             },
           },
           {
-            name: "get_recent_items",
-            description: "Get recently added items from the collection",
-            inputSchema: {
-              type: "object",
-              properties: {
-                limit: {
-                  type: "number",
-                  description: "Maximum number of recent items to return (default: 10)",
-                  default: 10
-                },
-                days: {
-                  type: "number",
-                  description: "Number of days back to look for recent items (default: 30)",
-                  default: 30
-                }
-              }
-            },
-          },
-          {
             name: "get_collection_overview",
             description: "Get a comprehensive overview of the collection including item counts by type, year distribution, and top authors",
             inputSchema: {
@@ -195,7 +162,7 @@ export class ZoteroSingleCollectionMCPServer {
             },
           },
           {
-            name: "search_by_analysis_metadata",
+            name: "search_structured_analysis",
             description: "Search papers by structured analysis content (methodology, findings, etc.)",
             inputSchema: {
               type: "object",
@@ -228,7 +195,7 @@ export class ZoteroSingleCollectionMCPServer {
             }
           },
           {
-            name: "get_analysis_summary",
+            name: "get_structured_analysis",
             description: "Get a summary of structured analysis coverage across the collection",
             inputSchema: {
               type: "object",
@@ -242,7 +209,7 @@ export class ZoteroSingleCollectionMCPServer {
             }
           },
           {
-            name: "compare_methodologies",
+            name: "get_methodologies",
             description: "Compare methodologies across papers with structured analysis",
             inputSchema: {
               type: "object",
@@ -262,7 +229,7 @@ export class ZoteroSingleCollectionMCPServer {
             }
           },
           {
-            name: "extract_research_gaps",
+            name: "get_gaps",
             description: "Extract and synthesize research gaps identified across papers",
             inputSchema: {
               type: "object",
@@ -285,26 +252,24 @@ export class ZoteroSingleCollectionMCPServer {
 
       try {
         switch (name) {
-          case "get_collection_info":
+          case "get_overview":
             return await this.getCollectionInfo();
           
-          case "list_items":
+          case "index_research":
             return await this.listItems(
               args?.limit || 100,
               args?.start || 0,
               args?.format || "json"
             );
           
-          case "search_items":
+          case "search_research":
             return await this.searchItems(args);
           
-          case "get_item_details":
+          case "get_details":
             return await this.getItemDetails(args.item_key, args?.include_children || false);
           
-          case "get_collection_tags":
-            return await this.getCollectionTags(args?.limit || 100);
           
-          case "generate_bibliography":
+          case "get_bibliography":
             return await this.generateBibliography(
               args?.item_keys || [],
               args?.style || "apa",
@@ -312,22 +277,20 @@ export class ZoteroSingleCollectionMCPServer {
               args?.limit || 50
             );
           
-          case "get_recent_items":
-            return await this.getRecentItems(args?.limit || 10, args?.days || 30);
           
           case "get_collection_overview":
             return await this.getCollectionOverview();
           
-          case "search_by_analysis_metadata":
+          case "search_structured_analysis":
             return await this.searchByAnalysisMetadata(args);
           
-          case "get_analysis_summary":
+          case "get_structured_analysis":
             return await this.getAnalysisSummary(args?.include_details || false);
           
-          case "compare_methodologies":
+          case "get_methodologies":
             return await this.compareMethodologies(args?.focus_area || "study_design", args?.limit || 20);
           
-          case "extract_research_gaps":
+          case "get_gaps":
             return await this.extractResearchGaps(args?.group_similar !== false);
           
           default:

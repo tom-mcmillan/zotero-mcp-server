@@ -1,0 +1,7 @@
+bindings:
+- members:
+  - user:tom@sailmcp.com
+  - allUsers
+  role: roles/run.invoker
+etag: BwY4hwdPmKc=
+version: 1

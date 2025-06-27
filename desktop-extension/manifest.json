@@ -1,0 +1,84 @@
+{
+  "dxt_version": "0.1",
+  "name": "climate-index",
+  "display_name": "Climate Index",
+  "version": "1.0.0",
+  "description": "Advanced research analysis on the price effect of climate change on public and private markets",
+  "long_description": "Climate Index gives Claude access to a curated collection of research papers on climate change impacts to financial markets. Analyze methodologies, compare study designs, extract research gaps, and generate bibliographies from academic and industry research on climate risk pricing in public and private markets.",
+  "author": {
+    "name": "Tom McMillan",
+    "url": "https://github.com/tom-mcmillan"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tom-mcmillan/zotero-mcp-server"
+  },
+  "homepage": "https://github.com/tom-mcmillan/zotero-mcp-server",
+  "documentation": "https://github.com/tom-mcmillan/zotero-mcp-server#readme",
+  "support": "https://github.com/tom-mcmillan/zotero-mcp-server/issues",
+  "icon": "assets/logo.png",
+  "screenshots": [
+    "assets/screenshots/overview.png",
+    "assets/screenshots/search.png"
+  ],
+  "server": {
+    "type": "node",
+    "entry_point": "server/zotero-mcp-server.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server/zotero-mcp-server.js"],
+      "env": {
+        "ZOTERO_API_KEY": "XjwHbvJLJur6PkAYtTuptSBH",
+        "ZOTERO_USER_ID": "13099156",
+        "ZOTERO_COLLECTION_KEY": "3D2RKLK3"
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "get_overview",
+      "description": "Get information about the collection"
+    },
+    {
+      "name": "index_research",
+      "description": "List papers in the collection"
+    },
+    {
+      "name": "search_research",
+      "description": "Search for specific papers"
+    },
+    {
+      "name": "get_details",
+      "description": "Get detailed information about a specific paper"
+    },
+    {
+      "name": "get_bibliography",
+      "description": "Create formatted bibliographies"
+    },
+    {
+      "name": "get_collection_overview",
+      "description": "Get comprehensive statistics about the research"
+    },
+    {
+      "name": "search_structured_analysis",
+      "description": "Search within structured analysis notes"
+    },
+    {
+      "name": "get_structured_analysis",
+      "description": "Get summary of structured analysis coverage"
+    },
+    {
+      "name": "get_methodologies",
+      "description": "Compare research methodologies across papers"
+    },
+    {
+      "name": "get_gaps",
+      "description": "Identify research opportunities"
+    }
+  ],
+  "keywords": ["zotero", "research", "climate", "science", "bibliography", "academic"],
+  "license": "MIT",
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"]
+  }
+}

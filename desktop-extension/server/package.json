@@ -6,8 +6,6 @@
   "type": "module",
   "scripts": {
     "start": "node zotero-mcp-server.js",
-    "start:http": "node http-server.js",
-    "start:sse": "node http-server-sse.js",
     "test": "node test-zotero.js"
   },
   "keywords": [
@@ -21,9 +19,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.13.2",
     "node-fetch": "^3.3.2",
-    "papaparse": "^5.4.1",
-    "express": "^4.18.2",
-    "cors": "^2.8.5"
+    "papaparse": "^5.4.1"
   },
   "engines": {
     "node": ">=16.0.0"
