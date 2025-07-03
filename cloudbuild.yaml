@@ -13,7 +13,7 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'zotero-mcp-server'
+      - 'climate-research-mcp-server'
       - '--image'
       - 'gcr.io/$PROJECT_ID/zotero-mcp-server:$COMMIT_SHA'
       - '--region'
@@ -22,13 +22,7 @@ steps:
       - 'managed'
       - '--allow-unauthenticated'
       - '--set-env-vars'
-      - 'ZOTERO_API_KEY=${_ZOTERO_API_KEY},ZOTERO_USER_ID=${_ZOTERO_USER_ID},ZOTERO_COLLECTION_KEY=${_ZOTERO_COLLECTION_KEY}'
-
-# Available substitutions for environment variables
-substitutions:
-  _ZOTERO_API_KEY: ''
-  _ZOTERO_USER_ID: ''
-  _ZOTERO_COLLECTION_KEY: ''
+      - 'ZOTERO_API_KEY=XjwHbvJLJur6PkAYtTuptSBH,ZOTERO_USER_ID=13099156,ZOTERO_COLLECTION_KEY=3D2RKLK311,NODE_ENV=production,MCP_API_KEY=climate-index-research-2025'
 
 images:
   - 'gcr.io/$PROJECT_ID/zotero-mcp-server:$COMMIT_SHA'

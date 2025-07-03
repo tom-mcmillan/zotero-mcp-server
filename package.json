@@ -1,7 +1,7 @@
 {
-  "name": "zotero-mcp-server",
+  "name": "climate-research-mcp-server", 
   "version": "1.0.0",
-  "description": "A Model Context Protocol server for Zotero integration",
+  "description": "Climate Index MCP server for climate research papers via Zotero",
   "main": "zotero-mcp-server.js",
   "type": "module",
   "scripts": {
